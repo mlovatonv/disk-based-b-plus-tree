@@ -1,0 +1,1 @@
+/usr/bin/c++  -O3 -DNDEBUG   CMakeFiles/btree-gtest.dir/tests/utec/disk/btree_test.cpp.o  -o btree-gtest  -L/home/mlovatonv/miniconda3/lib -Wl,-rpath,/home/mlovatonv/miniconda3/lib libbtree.a /home/mlovatonv/miniconda3/lib/libgtest.so /home/mlovatonv/miniconda3/lib/libgmock_main.a /home/mlovatonv/miniconda3/lib/libgmock.a /home/mlovatonv/miniconda3/lib/libfmt.a -lpthread 

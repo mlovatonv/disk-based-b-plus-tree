@@ -1,0 +1,4 @@
+/home/mlovatonv/miniconda3/lib/libbtree.a
+/home/mlovatonv/miniconda3/include/utec/disk/pagemanager.cpp
+/home/mlovatonv/miniconda3/include/utec/disk/btree.h
+/home/mlovatonv/miniconda3/include/utec/disk/pagemanager.h
