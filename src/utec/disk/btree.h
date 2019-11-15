@@ -210,8 +210,7 @@ public:
   }
 
   int insert(node &ptr, const T &key, const long &data_id) {
-    int pos = 0;
-    
+    int pos = 0; 
     while (pos < ptr.count && ptr.keys[pos] < key) {
       pos++;
     }
@@ -369,31 +368,30 @@ public:
     this->write_node(right.page_id, right);
   } 
 
-  iterator begin() {
+  iterator find(const T &key) {
     node ptr = this->read_node(header.root_id);
+    int pos = 0;
+
     while (!ptr.is_leaf) {
-      ptr = this->read_node(ptr.pages[0]);
+      pos = 0;
+      while (pos < ptr.count && ptr.keys[pos] < key) {
+        pos++;
+      }
+      ptr = this->read_node(ptr.pages[pos]);
     }
     iterator it(this->pm, ptr.page_id);
     return it;
+  }
+
+  iterator begin() {
+    return this->find(0);
   }
 
   iterator end() {
     iterator it(this->pm, -1);
     return it;
   }
-
-  iterator find(const T &key) {
-    for (auto it = this->begin(); it != this->end(); ++it) {
-      if (key == (*it)) {
-        return it;
-      }
-      if (key < (*it)) {
-        return this->end();
-      }
-    }   
-  }
-
+  
   void print(std::ostream& out) {
     for (auto it = this->begin(); it != this->end(); ++it) {
       out << (*it);
