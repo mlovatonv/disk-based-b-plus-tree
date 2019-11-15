@@ -41,15 +41,6 @@ Build process
 
 run gtest:
 ```
-./btree-gtest
+./build/btree-gtest
 ```
 
-or 
-
-```
-cd /my_project_path/
-mkdir build
-cd build
-cmake ..
-make all
-```
