@@ -4,6 +4,8 @@
 
 #include <algorithm>
 #include <memory>
+#include <utility>
+#include <vector>
 
 namespace utec {
 namespace disk {
@@ -379,8 +381,18 @@ public:
       }
       ptr = this->read_node(ptr.pages[pos]);
     }
-    iterator it(this->pm, ptr.page_id);
+
+    pos = 0;
+    while (pos < ptr.count && ptr.keys[pos] < key) {
+      pos++;
+    }
+
+    iterator it(this->pm, ptr.page_id, pos);
     return it;
+  }
+
+  std::pair<iterator,iterator> range_search(const T &begin, const T &end) {
+    return std::make_pair(this->find(begin), this->find(end));
   }
 
   iterator begin() {

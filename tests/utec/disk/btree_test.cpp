@@ -79,7 +79,7 @@ TEST_F(DiskBasedBtree, IndexingRandomElements) {
 
   infile.close();
   
-  n = 123456;
+  n = 1608732;
   Student s{n, true, "maria", "lovaton", 102};
   student_manager.save(student_id, s); 
   bt.insert(n, student_id);
@@ -102,15 +102,50 @@ TEST_F(DiskBasedBtree, Persistence) {
   btree<long, BTREE_ORDER> bt(pm);
 
   pagemanager student_manager("students.bin");
-
-  auto it = bt.find(123456);
+  
+  int search_id = 1608732;
+  auto it = bt.find(search_id);
   long page_id = it.get_page_id(); 
   Student s;
   student_manager.recover(page_id, s);
 
-  std::string recover_name(s.name, 5);
-  std::string real_name = "maria";
+  bool find = (s.id == search_id);
 
-  EXPECT_EQ(recover_name, real_name);
+  EXPECT_EQ(find, 1);
 }
 
+TEST_F(DiskBasedBtree, FindTest) {
+  std::shared_ptr<pagemanager> pm = std::make_shared<pagemanager>("btree.index");
+  btree<long, BTREE_ORDER> bt(pm);
+
+  pagemanager student_manager("students.bin");
+  
+  int search_id = 123;
+  auto it = bt.find(search_id);
+  long page_id = it.get_page_id(); 
+  Student s;
+  student_manager.recover(page_id, s);
+  
+  bool find = (s.id == search_id); 
+
+  EXPECT_EQ(find, 0);
+}
+
+TEST_F(DiskBasedBtree, RangeSearchTest) {
+  std::shared_ptr<pagemanager> pm = std::make_shared<pagemanager>("btree.index");
+  btree<long, BTREE_ORDER> bt(pm);
+
+  pagemanager student_manager("students.bin");
+  
+  int begin_id = 123;
+  int end_id = 1608732;
+  std::pair<btreeiterator<long, BTREE_ORDER>, btreeiterator<long, BTREE_ORDER>> its = bt.range_search(begin_id, end_id);
+  std::vector<long> ids;
+  for (auto it = its.first; it != its.second; ++it) {
+    Student s;
+    student_manager.recover(it.get_page_id(), s);
+    ids.push_back(s.id); 
+  }
+
+  EXPECT_EQ(ids.size(), 67896);
+}
